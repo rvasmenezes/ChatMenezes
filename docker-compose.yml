@@ -1,0 +1,62 @@
+version: "3.8"
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "admin"
+      RABBITMQ_DEFAULT_PASS: "admin"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "ChatMenezes_Dev"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    command: ["postgres", "-c", "log_statement=all"]
+
+  db-init:
+    image: postgres:13
+    depends_on:
+      - postgres
+    environment:
+      PGPASSWORD: postgres
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    entrypoint: |
+      bash -c "
+      until pg_isready -h postgres -U postgres; do
+        echo 'Waiting for PostgreSQL to be ready...'
+        sleep 1
+      done
+      psql -h postgres -U postgres -d ChatMenezes_Dev -f /docker-entrypoint-initdb.d/init.sql
+      "
+
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "5533:8080"
+      - "443:443"
+    depends_on:
+      - rabbitmq
+      - postgres
+      - db-init
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+
+volumes:
+  rabbitmq_data:
+  postgres_data:

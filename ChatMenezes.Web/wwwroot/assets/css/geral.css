@@ -1,0 +1,95 @@
+﻿
+#loading {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+#loading img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.text-danger {
+    margin-left: 0.25rem;
+}
+
+.text-validacao {
+    font-size: 0.75rem;
+}
+
+.carroGaragem {
+    background-image: url('../../ImagensIcone/carro.png');
+    height: 150px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+@media (max-width: 1500px) {
+    .carroGaragem {
+        background-size: cover;
+    }
+
+    .selectPlaca {
+        width: 60% !important;
+    }
+}
+
+@media (min-width: 1501px) {
+    .carroGaragem {
+        background-size: cover;
+    }
+
+    .selectPlaca {
+        width: 45% !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .selectPlaca {
+        width: 80% !important;
+    }
+}
+
+@media (max-width: 1000px) {
+    .selectPlaca {
+        width: 90% !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .selectPlaca {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 570px) {
+    .selectPlaca {
+        width: 70% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .cropit-preview, .imgCropit {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 880px) {
+    .divConfirmarRecebimento {
+        padding-left: 60px !important;
+    }
+}
+
+@media (max-width: 765px) {
+    .divConfirmarRecebimento {
+        padding-left: 10px !important;
+    }
+}

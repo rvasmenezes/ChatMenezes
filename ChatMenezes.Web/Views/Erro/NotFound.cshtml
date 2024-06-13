@@ -1,0 +1,18 @@
+﻿@model ErroViewModel
+@using ChatMenezes.Domain
+
+@{
+    ViewData["Title"] = "Erro";
+    ViewData["ControllerVoltar"] = "Item Reserva";
+}
+
+<h1 class="text-danger">@ViewData["Title"]</h1>
+<h2 class="text-danger">@Model.Messagem</h2>
+
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+    </p>
+}
+

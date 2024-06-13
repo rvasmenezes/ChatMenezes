@@ -1,0 +1,30 @@
+﻿
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Login</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/Login.css" />
+        <link rel="icon" type="image/png" href="~/assets/img/favicon.png">
+    </head>
+    <body class="d-flex align-items-center min-vh-100" style="background-color: white">
+        <div class="mensagens" style="position: fixed; top: 10px; right: 10px; z-index: 1000;"></div>
+        <div id="loading">
+            <img src="~/ImagensIcone/loading4.gif" width="50px">
+        </div>
+        <div class="container text-center" style="margin-right: unset;">
+            <div class="row">
+                <div class="col-sm-9 col-md-7 col-lg-5 mx-auto" style="text-align:center;">
+                    <h1>CHAT MENEZES</h1>
+                </div>
+            </div>
+            @RenderBody()
+        </div>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @RenderSection("Scripts", required: false)        
+    </body>
+</html>

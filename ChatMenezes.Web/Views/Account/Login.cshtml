@@ -1,0 +1,100 @@
+﻿@model LoginRequest
+@using ChatMenezes.Domain.Aggregates.UserAgg.Requests
+
+@{
+    Layout = "~/Views/Shared/_LayoutLoginExternal.cshtml";
+    ViewData["Title"] = "Login";
+}
+
+<div class="row">
+    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-3">
+            <div style="padding: 3.25rem;">
+                <h5 class="card-title text-center">Log In</h5>
+                <form class="form-signin" asp-action="Login">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div style="margin-bottom: 15px;">
+                        <input type="email" asp-for="Email" id="inputEmail" class="form-control" placeholder="Email" autofocus>
+                    </div>
+                    <div style="margin-bottom: 15px;text-align: left;">
+                        <input type="password" asp-for="Password" id="txtPassword" class="form-control" placeholder="Senha">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <span class="text-danger text-validacao validacaoLogin" style="display:none;"></span>
+                    </div>
+                    <div class="mb-3" style="float: left;">
+                        <input type="checkbox" id="ckMostrarSenha" class="onChangeMostrarSenha">
+                        <label>
+                            Show password
+                        </label>
+                    </div>
+                    <div class="mb-3" style="float: right;">
+                        <input type="checkbox" class="custom-control-input" id="customCheck1">
+                        <label asp-for="RememberMe" for="customCheck1">
+                            <input asp-for="RememberMe" />
+                            @Html.DisplayNameFor(m => m.RememberMe)
+                        </label>
+                    </div>
+                    <input type="submit" value="Enter" class="btn btn-lg btn-warning btn-block text-uppercase" />
+                    <div style="padding-top: 10px;">
+                        <a asp-action="Register">Register</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            $('.onChangeMostrarSenha').change(function () {
+                var senhaInput = $('#txtPassword');
+                if ($(this).is(':checked')) {
+                    senhaInput.attr('type', 'text');
+                } else {
+                    senhaInput.attr('type', 'password');
+                }
+            });
+
+            $('form').submit(function (e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Account/Login',
+                    data: formData,
+                    beforeSend: function () {
+                        $('#loading').show();
+                    },
+                    complete: function () {
+                        $('#loading').hide();
+                    },
+                    success: function (response) {
+                        console.log("response", response)
+                        window.location.href = response;
+                    },
+                    error: function (erro) {
+                        if (erro.status == 400) {
+                            $(".validacaoLogin").show();
+                            $(".validacaoLogin").text(erro.responseText);
+                        }
+                        else {
+                            $(".validacaoLogin").show();
+                            $(".validacaoLogin").text("Erro inesperado!");
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
+
+}

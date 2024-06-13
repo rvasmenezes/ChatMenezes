@@ -1,0 +1,84 @@
+﻿@model CreateUserRequest;
+@using ChatMenezes.Domain.Aggregates.UserAgg.Requests;
+
+@{
+    Layout = "~/Views/Shared/_LayoutLoginExternal.cshtml";
+    ViewData["Title"] = "Registro de Usuário";
+}
+
+<div class="row">
+    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-3">
+            <div style="padding: 3.25rem;">
+                <h5 class="card-title text-center">Registrar Usuário</h5>
+                <form class="form-signin" asp-action="Registro">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>                    
+                    <div style="margin-bottom: 15px;text-align: left;">
+                        <input type="text" asp-for="Name" class="form-control" placeholder="Name" autofocus>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div style="margin-bottom: 15px;text-align: left;">
+                        <input type="email" asp-for="Email" class="form-control" placeholder="Email" autofocus>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div style="margin-bottom: 15px;text-align: left;">
+                        <input type="password" asp-for="Password" class="form-control" placeholder="Password">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div style="margin-bottom: 15px;text-align: left;">
+                        <input type="password" asp-for="PasswordConfirmation" class="form-control" placeholder="Confirmation password">
+                        <span asp-validation-for="PasswordConfirmation" class="text-danger"></span>
+                    </div>
+                    <button class="btn btn-lg btn-warning btn-block text-uppercase" type="submit">Register</button>
+                    <a class="btn btn-sm btn-outline-warning btn-block text-uppercase" asp-area="" asp-controller="Account" asp-action="Login">
+                        Already registered
+                    </a>
+                    <span class="text-danger text-validacao registerValidation" style="display:none;"></span>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+     <script type="text/javascript">
+
+        $(function () {
+
+            $('form').submit(function(e) {
+                e.preventDefault();
+    
+                var formData = $(this).serialize();
+    
+                $.ajax({
+                    type: 'POST',
+                    url: '/Account/Register',
+                    data: formData,
+                    beforeSend: function() {
+                        $('#loading').show();
+                    },
+                    complete: function() {
+                        $('#loading').hide();
+                    },
+                    success: function(response) {
+                        window.location.href = response;
+                    },
+                    error: function(erro) {
+                        if (erro.status == 400) {
+                            $(".registerValidation").show();
+                            $(".registerValidation").html(erro.responseText);
+                        }
+                        else {
+                            $(".registerValidation").show();
+                            $(".registerValidation").text("Erro inesperado!");
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
+}

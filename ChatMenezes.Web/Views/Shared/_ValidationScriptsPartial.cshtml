@@ -1,0 +1,19 @@
+﻿<script src="~/js/jquery-3.6.4.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script type="text/javascript">
+
+    function CriarAlerta(tipo, mensagem) {
+        var alerta = $('<div class="alert alert-' + tipo + ' alert-dismissible" role="alert" style="margin-bottom: 10px;color: white;">');
+        alerta.html('<button type="button" style="margin-top: -3px;" class="btn-close alert-text" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + mensagem);
+        $('.mensagens').append(alerta);
+        setTimeout(function() {
+            alerta.fadeOut('slow');
+        }, 5000);
+    }
+
+    $('.btnChamaLoading').click(function () {
+        $('#loading').show();
+    });
+
+</script>

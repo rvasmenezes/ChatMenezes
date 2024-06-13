@@ -1,0 +1,17 @@
+﻿@model ErroViewModel
+@using ChatMenezes.Domain
+
+@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<h1 class="text-danger">Erro</h1>
+<h2 class="text-danger">@Model.Messagem</h2>
+
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>ID da Requisição:</strong> <code>@Model.RequestId</code>
+    </p>
+}
+
