@@ -1,4 +1,5 @@
 ﻿using ChatMenezes.Core.ApplicationContext;
+using ChatMenezes.Core.Helpers;
 using ChatMenezes.Core.RabbitMQ;
 using ChatMenezes.Domain.Aggregates.MessageAgg.Interfaces;
 using ChatMenezes.Domain.Aggregates.MessageAgg.Services;
@@ -22,6 +23,7 @@ namespace ChatMenezes.Domain
             services.AddScoped<IMessageServices, MessageServices>();
 
             services.AddScoped<RabbitMQServices>();
+            services.AddScoped<GlobalVariables>();
             services.AddHostedService<QueueConsumer>();
 
             return services;

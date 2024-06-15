@@ -1,4 +1,5 @@
-﻿using ChatMenezes.Domain.Aggregates.StockAgg.Dtos;
+﻿using ChatMenezes.Core.Helpers;
+using ChatMenezes.Domain.Aggregates.StockAgg.Dtos;
 using ChatMenezes.Domain.Aggregates.StockAgg.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,20 +16,25 @@ namespace ChatMenezes.Domain.Host
         private readonly IConnection _connection;
         private readonly IModel _channel;
 
-        public QueueConsumer(
-            IServiceProvider serviceProvider)
+        public QueueConsumer(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
 
-            var factory = new ConnectionFactory()
+            using (var scope = _serviceProvider.CreateScope())
             {
-                HostName = "rabbitmq",
-                Port = 5672,
-                UserName = "admin",
-                Password = "admin"
-            };
+                var _globalVariables = scope.ServiceProvider.GetRequiredService<GlobalVariables>();
 
-            _connection = factory.CreateConnection();
+                var factory = new ConnectionFactory()
+                {
+                    HostName = _globalVariables.RabbitMQHostName,
+                    Port = _globalVariables.RabbitMQPort,
+                    UserName = _globalVariables.RabbitMQUserName,
+                    Password = _globalVariables.RabbitMQPassword
+                };
+
+                _connection = factory.CreateConnection();
+            }
+
             _channel = _connection.CreateModel();
         }
 

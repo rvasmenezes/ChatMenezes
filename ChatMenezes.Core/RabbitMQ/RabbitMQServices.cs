@@ -1,43 +1,45 @@
-﻿using RabbitMQ.Client;
+﻿using ChatMenezes.Core.Helpers;
+using RabbitMQ.Client;
 using System.Text;
-using IConnection = RabbitMQ.Client.IConnection;
-using IModel = RabbitMQ.Client.IModel;
 
 namespace ChatMenezes.Core.RabbitMQ
 {
     public class RabbitMQServices
     {
-        private readonly IConnection _connection;
-        private readonly IModel _channel;
 
-        public RabbitMQServices()
+        public readonly GlobalVariables _globalVariables;
+
+        public RabbitMQServices(GlobalVariables globalVariables)
         {
-            var factory = new ConnectionFactory()
-            {
-                HostName = "rabbitmq",
-                Port = 5672,
-                UserName = "admin",
-                Password = "admin"
-            };
-
-            _connection = factory.CreateConnection();
-            _channel = _connection.CreateModel();
+            _globalVariables = globalVariables;
         }
 
         public void SendMessage(string queueName, string message)
         {
-            _channel.QueueDeclare(queue: queueName,
+            var factory = new ConnectionFactory()
+            {
+                HostName = _globalVariables.RabbitMQHostName,
+                Port = _globalVariables.RabbitMQPort,
+                UserName = _globalVariables.RabbitMQUserName,
+                Password = _globalVariables.RabbitMQPassword
+            };
+
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(queue: queueName,
                                  durable: false,
                                  exclusive: false,
                                  autoDelete: false,
                                  arguments: null);
 
-            var body = Encoding.UTF8.GetBytes(message);
+                var body = Encoding.UTF8.GetBytes(message);
 
-            _channel.BasicPublish(exchange: "",
-                                 routingKey: queueName,
-                                 basicProperties: null,
-                                 body: body);
+                channel.BasicPublish(exchange: "",
+                                     routingKey: queueName,
+                                     basicProperties: null,
+                                     body: body);
+            }
         }
     }
 }
